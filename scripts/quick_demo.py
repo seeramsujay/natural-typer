@@ -5,6 +5,8 @@ Quick Test Script for Human Typer
 Run this script to quickly test the human typer with a simple message.
 """
 
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "src")))
 from human_typer import HumanTyper, PYNPUT_AVAILABLE
 
 def main():
