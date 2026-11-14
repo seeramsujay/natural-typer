@@ -10,9 +10,7 @@ import os
 import platform
 import sys
 import threading
-import time
 import tkinter as tk
-from pathlib import Path
 from tkinter import filedialog, messagebox, scrolledtext, ttk
 
 # Add src directory to path if running from different location
@@ -21,31 +19,30 @@ if src_dir not in sys.path:
     sys.path.insert(0, src_dir)
 
 try:
-    from human_typer import PYNPUT_AVAILABLE, HumanTyper
     from config import (
-        DEFAULT_SPEED_CPM,
-        DEFAULT_ERROR_RATE,
         DEFAULT_CORRECTION_RATE,
+        DEFAULT_ERROR_RATE,
+        DEFAULT_SPEED_CPM,
         DEFAULT_WINDOW_SIZE,
-        SETTINGS_FILE,
+        MAX_SPEED_CPM,
         MAX_TEXT_LENGTH_WARNING,
         MIN_SPEED_CPM,
-        MAX_SPEED_CPM,
+        SETTINGS_FILE,
     )
+    from human_typer import PYNPUT_AVAILABLE, HumanTyper
 except ImportError:
     # Fallback for different project structures
     sys.path.insert(0, os.path.dirname(src_dir))
-    from human_typer import PYNPUT_AVAILABLE, HumanTyper
     from config import (
-        DEFAULT_SPEED_CPM,
-        DEFAULT_ERROR_RATE,
         DEFAULT_CORRECTION_RATE,
-        DEFAULT_WINDOW_SIZE,
-        SETTINGS_FILE,
+        DEFAULT_ERROR_RATE,
+        DEFAULT_SPEED_CPM,
+        MAX_SPEED_CPM,
         MAX_TEXT_LENGTH_WARNING,
         MIN_SPEED_CPM,
-        MAX_SPEED_CPM,
+        SETTINGS_FILE,
     )
+    from human_typer import PYNPUT_AVAILABLE, HumanTyper
 
 
 class HumanTyperGUI:
@@ -133,20 +130,28 @@ class HumanTyperGUI:
 
         # Status frame
         status_frame = ttk.LabelFrame(main_frame, text="System Status", padding="10")
-        status_frame.grid(row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+        status_frame.grid(
+            row=1, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10)
+        )
         status_frame.columnconfigure(1, weight=1)
 
         ttk.Label(status_frame, text="Platform:").grid(row=0, column=0, sticky=tk.W)
         platform_text = f"{platform.system()} {platform.release()}"
-        ttk.Label(status_frame, text=platform_text).grid(row=0, column=1, sticky=tk.W, padx=(10, 0))
+        ttk.Label(status_frame, text=platform_text).grid(
+            row=0, column=1, sticky=tk.W, padx=(10, 0)
+        )
 
-        ttk.Label(status_frame, text="Keyboard Simulation:").grid(row=1, column=0, sticky=tk.W)
+        ttk.Label(status_frame, text="Keyboard Simulation:").grid(
+            row=1, column=0, sticky=tk.W
+        )
         self.status_label = ttk.Label(
             status_frame, text="", foreground="green" if PYNPUT_AVAILABLE else "red"
         )
         self.status_label.grid(row=1, column=1, sticky=tk.W, padx=(10, 0))
 
-        ttk.Label(status_frame, text="Hotkey Support:").grid(row=2, column=0, sticky=tk.W)
+        ttk.Label(status_frame, text="Hotkey Support:").grid(
+            row=2, column=0, sticky=tk.W
+        )
         hotkey_status = "F6 Available ✓" if PYNPUT_AVAILABLE else "Not Available ✗"
         hotkey_color = "green" if PYNPUT_AVAILABLE else "red"
         ttk.Label(status_frame, text=hotkey_status, foreground=hotkey_color).grid(
@@ -162,8 +167,12 @@ class HumanTyperGUI:
         text_frame.rowconfigure(0, weight=1)
 
         # Text input area
-        self.text_input = scrolledtext.ScrolledText(text_frame, wrap=tk.WORD, height=8, width=60)
-        self.text_input.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10))
+        self.text_input = scrolledtext.ScrolledText(
+            text_frame, wrap=tk.WORD, height=8, width=60
+        )
+        self.text_input.grid(
+            row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S), pady=(0, 10)
+        )
 
         # Default text
         default_text = "Hello! This is the Human Typer Mimicker with F6 hotkey support. Press F6 to start typing!"
@@ -173,9 +182,9 @@ class HumanTyperGUI:
         text_button_frame = ttk.Frame(text_frame)
         text_button_frame.grid(row=1, column=0, sticky=tk.W, pady=(0, 10))
 
-        ttk.Button(text_button_frame, text="Load from File", command=self.load_text_file).pack(
-            side=tk.LEFT, padx=(0, 5)
-        )
+        ttk.Button(
+            text_button_frame, text="Load from File", command=self.load_text_file
+        ).pack(side=tk.LEFT, padx=(0, 5))
         ttk.Button(text_button_frame, text="Clear Text", command=self.clear_text).pack(
             side=tk.LEFT, padx=(0, 5)
         )
@@ -194,8 +203,12 @@ class HumanTyperGUI:
         sample_combo.bind("<<ComboboxSelected>>", self.load_sample_text)
 
         # Settings frame
-        settings_frame = ttk.LabelFrame(main_frame, text="Typing Settings", padding="10")
-        settings_frame.grid(row=3, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10))
+        settings_frame = ttk.LabelFrame(
+            main_frame, text="Typing Settings", padding="10"
+        )
+        settings_frame.grid(
+            row=3, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(0, 10)
+        )
         settings_frame.columnconfigure(1, weight=1)
 
         # Speed setting
@@ -219,7 +232,9 @@ class HumanTyperGUI:
         self.speed_label.pack(side=tk.RIGHT, padx=(10, 0))
 
         # Error rate setting
-        ttk.Label(settings_frame, text="Error Rate (%):").grid(row=1, column=0, sticky=tk.W, pady=2)
+        ttk.Label(settings_frame, text="Error Rate (%):").grid(
+            row=1, column=0, sticky=tk.W, pady=2
+        )
         self.error_var = tk.StringVar(value=str(int(DEFAULT_ERROR_RATE * 100)))
         error_frame = ttk.Frame(settings_frame)
         error_frame.grid(row=1, column=1, sticky=(tk.W, tk.E), padx=(10, 0), pady=2)
@@ -240,9 +255,13 @@ class HumanTyperGUI:
         ttk.Label(settings_frame, text="Correction Rate (%):").grid(
             row=2, column=0, sticky=tk.W, pady=2
         )
-        self.correction_var = tk.StringVar(value=str(int(DEFAULT_CORRECTION_RATE * 100)))
+        self.correction_var = tk.StringVar(
+            value=str(int(DEFAULT_CORRECTION_RATE * 100))
+        )
         correction_frame = ttk.Frame(settings_frame)
-        correction_frame.grid(row=2, column=1, sticky=(tk.W, tk.E), padx=(10, 0), pady=2)
+        correction_frame.grid(
+            row=2, column=1, sticky=(tk.W, tk.E), padx=(10, 0), pady=2
+        )
 
         self.correction_scale = ttk.Scale(
             correction_frame,
@@ -294,13 +313,17 @@ class HumanTyperGUI:
 
         # Progress frame
         progress_frame = ttk.LabelFrame(main_frame, text="Progress", padding="10")
-        progress_frame.grid(row=5, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(10, 0))
+        progress_frame.grid(
+            row=5, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(10, 0)
+        )
         progress_frame.columnconfigure(0, weight=1)
 
         # Hotkey status indicator
         self.hotkey_status_var = tk.StringVar(value="Hotkey: Inactive")
         self.hotkey_status_label = ttk.Label(
-            progress_frame, textvariable=self.hotkey_status_var, font=("Arial", 10, "bold")
+            progress_frame,
+            textvariable=self.hotkey_status_var,
+            font=("Arial", 10, "bold"),
         )
         self.hotkey_status_label.grid(row=0, column=0, sticky=tk.W, pady=(0, 5))
 
@@ -309,12 +332,16 @@ class HumanTyperGUI:
         self.progress_label = ttk.Label(progress_frame, textvariable=self.progress_var)
         self.progress_label.grid(row=1, column=0, sticky=tk.W, pady=(0, 5))
 
-        self.progress_bar = ttk.Progressbar(progress_frame, mode="determinate", maximum=100)
+        self.progress_bar = ttk.Progressbar(
+            progress_frame, mode="determinate", maximum=100
+        )
         self.progress_bar.grid(row=2, column=0, sticky=(tk.W, tk.E))
 
         # Help frame with improved layout
         help_frame = ttk.LabelFrame(main_frame, text="Instructions", padding="10")
-        help_frame.grid(row=6, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(10, 0))
+        help_frame.grid(
+            row=6, column=0, columnspan=2, sticky=(tk.W, tk.E), pady=(10, 0)
+        )
         help_frame.columnconfigure(0, weight=1)
         help_frame.columnconfigure(1, weight=1)
 
@@ -376,7 +403,8 @@ class HumanTyperGUI:
     def load_text_file(self):
         """Load text from a file."""
         file_path = filedialog.askopenfilename(
-            title="Select Text File", filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+            title="Select Text File",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
         )
         if file_path:
             try:
@@ -386,7 +414,7 @@ class HumanTyperGUI:
                     self.text_input.insert("1.0", content)
                 messagebox.showinfo("Success", f"Loaded text from {file_path}")
             except Exception as e:
-                messagebox.showerror("Error", f"Failed to load file: {str(e)}")
+                messagebox.showerror("Error", f"Failed to load file: {e!s}")
 
     def clear_text(self):
         """Clear the text input area."""
@@ -420,7 +448,7 @@ class HumanTyperGUI:
                 if not response:
                     return
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to get text: {str(e)}")
+            messagebox.showerror("Error", f"Failed to get text: {e!s}")
             return
 
         try:
@@ -428,7 +456,7 @@ class HumanTyperGUI:
             use_keyboard = self.keyboard_var.get()
             self.typer = HumanTyper(use_keyboard=use_keyboard)
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to initialize typer: {str(e)}")
+            messagebox.showerror("Error", f"Failed to initialize typer: {e!s}")
             return
 
         # Configure settings
@@ -466,7 +494,9 @@ class HumanTyperGUI:
 
         # Start in separate thread to avoid blocking GUI
         self.typing_thread = threading.Thread(
-            target=lambda: self.typer.type_text(text, use_hotkey=use_hotkey, show_progress=False),
+            target=lambda: self.typer.type_text(
+                text, use_hotkey=use_hotkey, show_progress=False
+            ),
             daemon=True,
         )
         self.typing_thread.start()
@@ -491,7 +521,9 @@ class HumanTyperGUI:
         """Called when typing starts."""
         self.is_typing = True
         self.hotkey_listening = False
-        self.root.after(0, lambda: self.hotkey_status_var.set("Hotkey: TYPING (Press F6 to stop)"))
+        self.root.after(
+            0, lambda: self.hotkey_status_var.set("Hotkey: TYPING (Press F6 to stop)")
+        )
         self.root.after(0, lambda: self.hotkey_status_label.config(foreground="orange"))
         self.root.after(0, lambda: self.progress_var.set("Typing in progress..."))
         self.root.after(0, lambda: self.progress_bar.config(mode="determinate"))
