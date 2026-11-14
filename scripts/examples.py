@@ -87,11 +87,11 @@ def long_text_example():
     typer.set_speed(200)  # Normal speed
     typer.set_error_rate(0.08)  # Normal error rate
 
-    text = """Human typing simulation is a fascinating area that combines psychology, 
-motor skills research, and computer science. When we type, we don't just press keys 
-in perfect sequence - we make mistakes, correct them, have slight variations in 
-timing, and occasionally pause to think. This human typer mimicker captures these 
-natural patterns to create realistic typing behavior that can be used for testing, 
+    text = """Human typing simulation is a fascinating area that combines psychology,
+motor skills research, and computer science. When we type, we don't just press keys
+in perfect sequence - we make mistakes, correct them, have slight variations in
+timing, and occasionally pause to think. This human typer mimicker captures these
+natural patterns to create realistic typing behavior that can be used for testing,
 automation, or demonstration purposes. The key is balancing realism with accuracy."""
 
     input("Press Enter when ready for long text typing...")
