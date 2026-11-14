@@ -10,10 +10,9 @@ Cross-platform support for Windows, macOS, and Linux.
 
 import platform
 import random
-import sys
 import threading
 import time
-from typing import Callable, Dict, List, Optional
+from collections.abc import Callable
 
 try:
     from pynput import keyboard
@@ -52,9 +51,9 @@ class HumanTyper:
         self.hotkey_listener = None
 
         # Callbacks for events
-        self.on_start_callback: Optional[Callable] = None
-        self.on_stop_callback: Optional[Callable] = None
-        self.on_progress_callback: Optional[Callable[[int, int], None]] = None
+        self.on_start_callback: Callable | None = None
+        self.on_stop_callback: Callable | None = None
+        self.on_progress_callback: Callable[[int, int], None] | None = None
 
         # Define keyboard layout for adjacent key errors (QWERTY)
         self.keyboard_layout = {
@@ -105,7 +104,8 @@ class HumanTyper:
 
         # Add natural variation
         variation = random.uniform(
-            -self.speed_variance / self.base_speed, self.speed_variance / self.base_speed
+            -self.speed_variance / self.base_speed,
+            self.speed_variance / self.base_speed,
         )
         delay = base_delay + variation
 
@@ -118,10 +118,10 @@ class HumanTyper:
 
     def _get_adjacent_key_error(self, char: str) -> str:
         """Get a random adjacent key for the given character.
-        
+
         Args:
             char: The character to get an adjacent key error for
-            
+
         Returns:
             str: A randomly selected adjacent key, maintaining case
         """
@@ -134,7 +134,7 @@ class HumanTyper:
 
     def _simulate_thinking_pause(self) -> None:
         """Simulate a natural thinking pause.
-        
+
         Randomly introduces realistic pauses that occur during human typing
         when the typist is thinking or hesitating.
         """
@@ -398,22 +398,30 @@ class HumanTyper:
         if show_progress:
             if self.use_keyboard:
                 if use_hotkey:
-                    print(f"Text ready to type: '{text[:50]}{'...' if len(text) > 50 else ''}'")
+                    print(
+                        f"Text ready to type: '{text[:50]}{'...' if len(text) > 50 else ''}'"
+                    )
                     print("Press F6 to start typing! (F6 again to stop)")
                     print("=" * 50)
                 else:
-                    print(f"Will start typing immediately...")
-                    print(f"Target text: '{text[:50]}{'...' if len(text) > 50 else ''}'")
+                    print("Will start typing immediately...")
+                    print(
+                        f"Target text: '{text[:50]}{'...' if len(text) > 50 else ''}'"
+                    )
                     print("=" * 50)
             else:
-                print(f"Simulating typing: '{text[:50]}{'...' if len(text) > 50 else ''}'")
+                print(
+                    f"Simulating typing: '{text[:50]}{'...' if len(text) > 50 else ''}'"
+                )
                 print("=" * 50)
 
         if use_hotkey and self.use_keyboard:
             self._start_hotkey_listener(text)
         else:
             # Start typing immediately
-            self.typing_thread = threading.Thread(target=self._typing_worker, args=(text,))
+            self.typing_thread = threading.Thread(
+                target=self._typing_worker, args=(text,)
+            )
             self.typing_thread.daemon = True
             self.typing_thread.start()
 
@@ -481,16 +489,16 @@ class HumanTyper:
 
     def set_callbacks(
         self,
-        on_start: Optional[Callable] = None,
-        on_stop: Optional[Callable] = None,
-        on_progress: Optional[Callable[[int, int], None]] = None,
+        on_start: Callable | None = None,
+        on_stop: Callable | None = None,
+        on_progress: Callable[[int, int], None] | None = None,
     ):
         """Set callback functions for typing events."""
         self.on_start_callback = on_start
         self.on_stop_callback = on_stop
         self.on_progress_callback = on_progress
 
-    def get_current_settings(self) -> Dict:
+    def get_current_settings(self) -> dict:
         """Get the current configuration settings."""
         return {
             "speed": self.base_speed,
@@ -505,5 +513,3 @@ class HumanTyper:
         """Cleanup when object is destroyed."""
         self.stop_typing()
         self.stop_hotkey_listener()
-
-

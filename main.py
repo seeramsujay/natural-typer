@@ -30,7 +30,7 @@ Examples:
   %(prog)s --speed 300      # Set typing speed to 300 CPM
         """,
     )
-    
+
     # Interface selection
     interface_group = parser.add_mutually_exclusive_group()
     interface_group.add_argument(
@@ -39,7 +39,7 @@ Examples:
     interface_group.add_argument(
         "--gui", action="store_true", help="Force graphical interface"
     )
-    
+
     # Typing parameters
     parser.add_argument(
         "--text",
@@ -63,19 +63,20 @@ Examples:
         action="store_true",
         help="Disable keyboard simulation (console output only)",
     )
-    
+
     args = parser.parse_args()
-    
+
     # Determine interface to use
     use_gui = False
-    
+
     # Check if tkinter is available
     try:
         import tkinter
+
         gui_available = True
     except ImportError:
         gui_available = False
-    
+
     if args.gui:
         if not gui_available:
             print("Error: GUI requested but tkinter is not available.", file=sys.stderr)
@@ -93,13 +94,15 @@ Examples:
     else:
         # Fallback to CLI
         use_gui = False
-    
+
     # Launch appropriate interface
     if use_gui:
         from src.human_typer_gui import main as gui_main
+
         gui_main()
     else:
         from src.cli import run_cli
+
         run_cli(
             text=args.text,
             speed=args.speed,
