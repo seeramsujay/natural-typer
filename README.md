@@ -1,4 +1,22 @@
-# Human Typer
+<div align="center">
+
+<img src="assets/logo.svg" alt="NaturalTyper Logo" width="160" />
+
+# NaturalTyper
+### Realistic Human Typing Simulator with Fatigue & Adjacent-Key Error Injection
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.8+](https://img.shields.io/badge/Python-3.8+-3776AB.svg?logo=python&logoColor=white)](https://python.org)
+[![UI: Tkinter GUI](https://img.shields.io/badge/UI-Tkinter%20GUI-orange.svg)](#)
+[![Input: pynput](https://img.shields.io/badge/Input-pynput%20Hardware%20Level-informational.svg)](https://pypi.org/project/pynput/)
+
+<p align="center">
+  <b>A sophisticated keyboard typing simulation framework that mimics human biometric nuances, variable CPM speeds, fatigue degradation curves, and realistic typo correction patterns.</b>
+</p>
+
+</div>
+
+---
 
 A Python library for simulating realistic human typing behavior with configurable error patterns and timing variations.
 
